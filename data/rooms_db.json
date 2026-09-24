@@ -1,0 +1,193 @@
+{
+  "rooms": {
+    "cinema-101": {
+      "id": "cinema-101",
+      "name": "Cinema Chill",
+      "createdAt": "2026-09-23T21:40:22.199Z",
+      "hostId": null,
+      "hostName": "Arvind"
+    },
+    "neon-hub-715": {
+      "id": "neon-hub-715",
+      "name": "Bunny",
+      "createdAt": "2026-09-24T15:12:16.196Z",
+      "hostId": "cc09dd48-baa0-43bb-85ad-2ee070072b6d",
+      "hostName": "Bunny"
+    }
+  },
+  "messages": {
+    "cinema-101": [
+      {
+        "id": "a1a04818-9898-4651-acb2-b8376d4dd088",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind joined the room",
+        "timestamp": "2026-09-23T21:41:25.954Z"
+      },
+      {
+        "id": "d262a1cf-fed2-4034-99cb-1bb0ca289226",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul joined the room",
+        "timestamp": "2026-09-23T21:41:25.956Z"
+      },
+      {
+        "id": "60cc46b0-b72d-4293-89f0-4a59c335f402",
+        "roomId": "cinema-101",
+        "senderId": "user-arvind-uuid",
+        "senderName": "Arvind",
+        "text": "Hello everyone!",
+        "timestamp": "2026-09-23T21:41:25.959Z"
+      },
+      {
+        "id": "fda26817-cb87-4923-a7fc-828cf1e503af",
+        "roomId": "cinema-101",
+        "senderId": "user-rahul-uuid",
+        "senderName": "Rahul",
+        "text": "Hi bro!",
+        "timestamp": "2026-09-23T21:41:25.963Z"
+      },
+      {
+        "id": "ec406a42-c9a0-494b-b720-b9ad872d87a7",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul changed their name to Rahul Sharma",
+        "timestamp": "2026-09-23T21:41:25.968Z"
+      },
+      {
+        "id": "3d1c7f65-2cfe-438b-8ac6-8107c498f457",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind started sharing their screen",
+        "timestamp": "2026-09-23T21:41:25.971Z"
+      },
+      {
+        "id": "630e7b35-f891-489e-ad8e-d1d4378728ee",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind stopped sharing their screen",
+        "timestamp": "2026-09-23T21:41:25.973Z"
+      },
+      {
+        "id": "1121397c-8a82-482e-ae6f-e25d4c78f158",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind left the room",
+        "timestamp": "2026-09-23T21:41:25.975Z"
+      },
+      {
+        "id": "4de57968-b1af-4596-9d07-79edbb6f50bd",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul Sharma left the room",
+        "timestamp": "2026-09-23T21:41:25.976Z"
+      },
+      {
+        "id": "abd233eb-0c45-4f7b-bb6d-eec869429bb1",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind joined the room",
+        "timestamp": "2026-09-24T15:23:54.073Z"
+      },
+      {
+        "id": "ba5498a8-3f8a-4c82-85f6-d15be8b7fcbb",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul joined the room",
+        "timestamp": "2026-09-24T15:23:54.112Z"
+      },
+      {
+        "id": "bac7304e-5073-4ea3-bb87-2393ff6ba092",
+        "roomId": "cinema-101",
+        "senderId": "user-arvind-uuid",
+        "senderName": "Arvind",
+        "text": "Hello everyone!",
+        "timestamp": "2026-09-24T15:23:54.161Z"
+      },
+      {
+        "id": "040c5ea7-8241-4d43-a6b1-60152402cc82",
+        "roomId": "cinema-101",
+        "senderId": "user-rahul-uuid",
+        "senderName": "Rahul",
+        "text": "Hi bro!",
+        "timestamp": "2026-09-24T15:23:54.186Z"
+      },
+      {
+        "id": "5f6dab10-91f2-4945-b4cb-0c267d5cb9d7",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul changed their name to Rahul Sharma",
+        "timestamp": "2026-09-24T15:23:54.213Z"
+      },
+      {
+        "id": "91ca238d-c3a0-41e0-809c-cd22c3491870",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind started sharing their screen",
+        "timestamp": "2026-09-24T15:23:54.261Z"
+      },
+      {
+        "id": "86e4c042-65d8-4d73-a8bf-236a3cb73278",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind stopped sharing their screen",
+        "timestamp": "2026-09-24T15:23:54.275Z"
+      },
+      {
+        "id": "38ab938e-cd17-4e68-b0f9-f52967c3a766",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Arvind left the room",
+        "timestamp": "2026-09-24T15:23:54.301Z"
+      },
+      {
+        "id": "73c81cef-fe12-4428-8a3d-8cc4e0255072",
+        "roomId": "cinema-101",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Rahul Sharma left the room",
+        "timestamp": "2026-09-24T15:23:54.319Z"
+      }
+    ],
+    "neon-hub-715": [
+      {
+        "id": "e04ef6f4-d272-4855-9abd-bc0a9aa3028a",
+        "roomId": "neon-hub-715",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Bunny joined the room",
+        "timestamp": "2026-09-24T15:12:16.482Z"
+      },
+      {
+        "id": "9ea47ee3-78b3-45a8-b4d4-18e6bf105d77",
+        "roomId": "neon-hub-715",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Bunny left the room",
+        "timestamp": "2026-09-24T15:20:48.870Z"
+      },
+      {
+        "id": "6a076b53-4b60-4099-9245-affeab038735",
+        "roomId": "neon-hub-715",
+        "senderId": "system",
+        "senderName": "System",
+        "text": "Bunny joined the room",
+        "timestamp": "2026-09-24T15:20:49.104Z"
+      }
+    ]
+  },
+  "lastSaved": "2026-09-24T15:23:54.319Z"
+}
