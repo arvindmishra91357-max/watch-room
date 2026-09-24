@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
   <title>WatchRoom — Real-Time Virtual Watch & Screen Share Room</title>
   <meta name="description" content="Join real-time virtual rooms to watch shared screens, chat live with friends, and hang out with zero lag.">
   
@@ -257,7 +257,7 @@
         <div class="room-layout">
           
           <!-- Column 1: Main Stage (Screen Share & Theater) -->
-          <div class="stage-container">
+          <div class="stage-container" id="stageContainer">
             
             <!-- Video Theater Canvas (Fills 100% Height) -->
             <div class="theater-wrapper" id="theaterWrapper">
@@ -414,11 +414,13 @@
                 </button>
               </div>
 
-              <!-- Close button for mobile drawer -->
-              <button id="btnMobileCloseSidebar" class="btn-icon-subtle mobile-only" aria-label="Close sidebar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
+              <!-- Mobile Stage Collapse/Expand Toggle -->
+              <button id="btnMobileToggleStage" class="btn-icon-subtle mobile-only" title="Toggle video stage" aria-label="Toggle stage">
+                <svg id="iconCollapseStage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <svg id="iconExpandStage" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
             </div>

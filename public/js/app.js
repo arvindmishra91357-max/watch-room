@@ -77,6 +77,10 @@
   const participantsTabCount = document.getElementById('participantsTabCount');
   const participantsTotalNum = document.getElementById('participantsTotalNum');
   const participantsList = document.getElementById('participantsList');
+  const stageContainer = document.getElementById('stageContainer');
+  const btnMobileToggleStage = document.getElementById('btnMobileToggleStage');
+  const iconCollapseStage = document.getElementById('iconCollapseStage');
+  const iconExpandStage = document.getElementById('iconExpandStage');
   const btnMobileCloseSidebar = document.getElementById('btnMobileCloseSidebar');
   const chatMessagesContainer = document.getElementById('chatMessagesContainer');
   const chatForm = document.getElementById('chatForm');
@@ -655,16 +659,59 @@
       ChatManager.setTabActive(false);
     });
 
-    // 11. Mobile Drawer
-    btnMobileToggleSidebar.addEventListener('click', () => {
-      roomSidebar.classList.toggle('mobile-open');
-      if (roomSidebar.classList.contains('mobile-open')) {
-        ChatManager.setTabActive(true);
-      }
-    });
+    // 11. Mobile Stage & Chat Controls
+    if (btnMobileToggleStage) {
+      btnMobileToggleStage.addEventListener('click', () => {
+        if (!stageContainer) return;
+        stageContainer.classList.toggle('mobile-stage-collapsed');
+        const isCollapsed = stageContainer.classList.contains('mobile-stage-collapsed');
+        if (iconCollapseStage && iconExpandStage) {
+          if (isCollapsed) {
+            iconCollapseStage.classList.add('hidden');
+            iconExpandStage.classList.remove('hidden');
+            btnMobileToggleStage.title = 'Show video stage';
+          } else {
+            iconCollapseStage.classList.remove('hidden');
+            iconExpandStage.classList.add('hidden');
+            btnMobileToggleStage.title = 'Hide video stage';
+          }
+        }
+        setTimeout(() => {
+          ChatManager.scrollToBottom();
+        }, 150);
+      });
+    }
 
-    btnMobileCloseSidebar.addEventListener('click', () => {
-      roomSidebar.classList.remove('mobile-open');
+    if (btnMobileToggleSidebar) {
+      btnMobileToggleSidebar.addEventListener('click', () => {
+        // If stage was collapsed, restore split view
+        if (stageContainer && stageContainer.classList.contains('mobile-stage-collapsed')) {
+          stageContainer.classList.remove('mobile-stage-collapsed');
+          if (iconCollapseStage && iconExpandStage) {
+            iconCollapseStage.classList.remove('hidden');
+            iconExpandStage.classList.add('hidden');
+          }
+        }
+        // Activate Chat tab and focus input
+        tabBtnChat.click();
+        chatInput.focus();
+        setTimeout(() => {
+          ChatManager.scrollToBottom();
+        }, 150);
+      });
+    }
+
+    if (btnMobileCloseSidebar) {
+      btnMobileCloseSidebar.addEventListener('click', () => {
+        roomSidebar.classList.remove('mobile-open');
+      });
+    }
+
+    // Auto-scroll chat on mobile virtual keyboard popup
+    chatInput.addEventListener('focus', () => {
+      setTimeout(() => {
+        ChatManager.scrollToBottom();
+      }, 300);
     });
 
     // 12. Floating Video Controls

@@ -1863,60 +1863,66 @@ body::after {
 
 /* ==========================================================================
    Responsive Adaptations (Tablets & Mobile)
+   True Mobile First: Split Theater + Chat, Zero Hidden Typing Space
    ========================================================================== */
-@media (max-width: 900px) {
-  .app-header {
-    padding: 0 16px;
+@media (max-width: 768px) {
+  :root {
+    --header-height: 52px;
   }
 
-  .room-layout {
-    flex-direction: column;
-    position: relative;
-  }
-
-  .stage-container {
-    height: 100%;
-    border-right: none;
-  }
-
-  /* Slide-over drawer on mobile for sidebar */
-  .room-sidebar {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    bottom: 0;
+  /* Prevent awkward horizontal jitter on mobile */
+  html, body {
+    overflow-x: hidden;
     width: 100%;
-    max-width: 380px;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 100%;
+    height: 100dvh;
+    font-size: 14px;
   }
 
-  .room-sidebar.mobile-open {
-    transform: translateX(0);
+  .app-container {
+    height: 100%;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
   }
 
-  .mobile-only {
-    display: inline-flex !important;
+  .app-main {
+    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+    overflow: hidden;
   }
 
-  .lobby-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .features-bar {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
+  /* Mobile App Header */
   .app-header {
+    height: var(--header-height);
+    min-height: var(--header-height);
+    max-height: var(--header-height);
     padding: 0 12px;
+    gap: 8px;
+  }
+
+  .header-left {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .logo-icon-wrapper {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-icon {
+    width: 16px;
+    height: 16px;
   }
 
   .brand-name {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+  }
+
+  .header-room-info {
+    gap: 6px;
+    min-width: 0;
   }
 
   .header-room-info .divider,
@@ -1924,57 +1930,458 @@ body::after {
     display: none;
   }
 
+  .room-code-badge {
+    padding: 3px 8px;
+    gap: 4px;
+  }
+
+  .room-code-badge .badge-label {
+    font-size: 0.65rem;
+  }
+
+  .room-code-badge .badge-code {
+    font-size: 0.76rem;
+  }
+
+  .copy-tiny-icon {
+    width: 11px;
+    height: 11px;
+  }
+
+  .presence-pill {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .user-profile-widget {
+    padding: 2px 6px 2px 2px;
+    gap: 4px;
+  }
+
+  .user-avatar-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
   .user-meta {
     display: none;
   }
 
-  .user-profile-widget {
+  .btn-sm .btn-text {
+    display: none;
+  }
+
+  .btn-sm {
+    padding: 6px 9px;
+  }
+
+  /* ==========================================================================
+     WATCH ROOM ON MOBILE: SPLIT STAGE & ACTIVE CHAT
+     ========================================================================== */
+  .room-section {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .room-layout {
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Stage Container: Top ~35% on mobile */
+  .stage-container {
+    width: 100%;
+    height: 35vh;
+    min-height: 185px;
+    max-height: 260px;
+    flex-shrink: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+    transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1), min-height 0.28s ease;
+  }
+
+  /* When stage is collapsed to give full screen to chat */
+  .stage-container.mobile-stage-collapsed {
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    border-bottom: none;
+    overflow: hidden;
+    visibility: hidden;
+  }
+
+  .theater-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Floating controls on mobile */
+  .video-floating-controls {
+    top: 8px;
+    right: 8px;
+    padding: 3px 6px;
+    gap: 4px;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-ctrl {
     padding: 4px;
+  }
+
+  .btn-ctrl svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .presenter-overlay {
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    font-size: 0.72rem;
+  }
+
+  /* Compact Empty Theater State on Mobile */
+  .empty-theater-state {
+    padding: 10px 14px 44px;
+    max-width: 100%;
+  }
+
+  .empty-graphic {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 6px;
+  }
+
+  .ambient-screen-glow {
+    width: 48px;
+    height: 48px;
+  }
+
+  .circle-1 {
+    width: 48px;
+    height: 48px;
+  }
+
+  .circle-2 {
+    width: 34px;
+    height: 34px;
+  }
+
+  .radar-center {
+    width: 26px;
+    height: 26px;
+  }
+
+  .display-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .empty-room-pill {
+    padding: 2px 10px;
+    font-size: 0.72rem;
+    margin-bottom: 4px;
+  }
+
+  .empty-title {
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .empty-subtitle {
+    display: none; /* Hide long desktop subtitle on mobile */
+  }
+
+  .empty-action-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    margin-top: 2px;
+  }
+
+  /* Mobile Stage Dock: Compact pill at bottom of stage */
+  .stage-dock {
+    bottom: 8px;
+    padding: 4px 10px;
+    gap: 6px;
+    background: hsla(222, 47%, 9%, 0.92);
+    border-radius: var(--radius-full);
+  }
+
+  .btn-dock {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    gap: 5px;
+  }
+
+  .btn-dock .btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .btn-dock .btn-text {
+    display: inline;
+  }
+
+  /* ==========================================================================
+     MOBILE SIDEBAR & LIVE CHAT (Bottom Area with Sticky Input)
+     ========================================================================== */
+  .room-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    flex: 1;
+    min-height: 0;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    border-left: none;
+    box-shadow: none;
+    display: flex !important;
+    flex-direction: column;
+    z-index: 10;
+    background: var(--bg-surface);
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tab-btn {
+    padding: 5px 8px;
+    font-size: 0.82rem;
+    gap: 6px;
+  }
+
+  .tab-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .tab-pane {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tab-pane.active {
+    display: flex;
+  }
+
+  /* Messages Scroll List on Mobile */
+  .chat-messages-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .chat-message-row {
+    max-width: 90%;
+  }
+
+  .chat-message-row.other .message-bubble,
+  .chat-message-row.me .message-bubble {
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .chat-start-notice {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+    margin-bottom: 4px;
+  }
+
+  /* Sticky Bottom Chat Input: Always visible, never hidden */
+  .chat-input-wrapper {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    width: 100%;
+    padding: 6px 10px max(10px, env(safe-area-inset-bottom));
+    background: var(--bg-surface-elevated);
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .emoji-quick-bar {
+    gap: 4px;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .quick-emoji-btn {
+    padding: 3px 7px;
+    font-size: 0.95rem;
+    min-width: 30px;
+    height: 28px;
+  }
+
+  .chat-input-row {
+    padding: 2px 4px 2px 10px;
+    gap: 6px;
+    background: var(--bg-glass-input);
+    border-radius: var(--radius-md);
+  }
+
+  /* CRITICAL: 16px font-size prevents iOS Safari from auto-zooming the viewport! */
+  .chat-input {
+    font-size: 16px !important;
+    padding: 8px 0;
+    min-height: 38px;
+    line-height: 1.3;
+  }
+
+  .btn-send-message {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-send-message svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* Participants tab on mobile */
+  .participants-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+  }
+
+  .participant-card {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .mobile-only {
+    display: inline-flex !important;
+  }
+
+  /* Toast Notification positioning on mobile (above sticky chat input) */
+  .toast-container {
+    bottom: 80px;
+  }
+}
+
+/* ==========================================================================
+   Mobile Phones (<600px): Lobby & Form Polish
+   ========================================================================== */
+@media (max-width: 600px) {
+  .lobby-section {
+    padding: 14px 14px 24px;
+  }
+
+  .lobby-container {
+    gap: 14px;
+  }
+
+  .hero-top-badges {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero-badge {
+    font-size: 0.74rem;
+    padding: 4px 10px;
+  }
+
+  .user-greeting-pill {
+    padding: 3px 8px;
+  }
+
+  .hero-title {
+    font-size: 1.7rem;
+    line-height: 1.18;
+  }
+
+  .hero-subtitle {
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  .lobby-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .action-card {
+    padding: 16px 16px;
+  }
+
+  .card-header-row {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .card-icon-badge {
+    width: 36px;
+    height: 36px;
+  }
+
+  .card-icon-badge svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .card-title {
+    font-size: 1.08rem;
+  }
+
+  /* 16px font-size prevents iOS zoom on tap */
+  .form-input {
+    font-size: 16px !important;
+    padding: 10px 12px;
+  }
+
+  .btn-block {
+    padding: 11px 16px;
+    font-size: 0.92rem;
   }
 
   .features-bar {
     grid-template-columns: 1fr;
-  }
-
-  .btn-dock .btn-text {
-    display: none;
-  }
-
-  .btn-dock {
-    padding: 8px 12px;
-  }
-
-  .room-sidebar {
-    max-width: 100%;
-  }
-
-  .empty-theater-state {
-    padding: 24px 16px 80px;
-  }
-
-  .empty-graphic {
-    width: 90px;
-    height: 90px;
-    margin-bottom: 16px;
-  }
-
-  .circle-1 {
-    width: 85px;
-    height: 85px;
-  }
-
-  .circle-2 {
-    width: 60px;
-    height: 60px;
-  }
-
-  .empty-title {
-    font-size: 1.2rem;
-  }
-
-  .stage-dock {
-    bottom: 16px;
-    padding: 6px 12px;
     gap: 8px;
+  }
+
+  .feature-item {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .modal-card {
+    width: calc(100% - 24px);
+    max-width: 400px;
+    padding: 20px 16px;
   }
 }
