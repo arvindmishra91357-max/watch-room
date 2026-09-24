@@ -104,60 +104,65 @@
       <section id="lobbyView" class="view-section lobby-section">
         <div class="lobby-container">
           
-          <!-- Hero Section -->
+          <!-- Hero Section with Integrated Identity Pill -->
           <div class="lobby-hero">
-            <div class="hero-badge">
-              <span class="pulse-dot"></span>
-              Ultra-Low Latency WebRTC Screen Sharing & Live Chat
+            <div class="hero-top-badges">
+              <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                Ultra-Low Latency WebRTC Screen Sharing & Live Chat
+              </div>
+
+              <!-- Sleek User Profile Pill (Replaces bulky redundant card) -->
+              <div class="user-greeting-pill" id="lobbyGreetingPill">
+                <div class="greeting-pill-avatar" id="lobbyUserAvatar">B</div>
+                <div class="greeting-pill-info">
+                  <span class="greeting-pill-sub">Joined as</span>
+                  <span class="greeting-pill-name" id="lobbyUserName">User</span>
+                </div>
+                <button type="button" id="lobbyChangeNameBtn" class="greeting-pill-btn" title="Change your name">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                  <span>Edit</span>
+                </button>
+              </div>
             </div>
-            <h1 class="hero-title">Watch Together.<br><span class="gradient-text">Anywhere in Real Time.</span></h1>
+
+            <h1 class="hero-title">Watch Together. <span class="gradient-text">Anywhere in Real Time.</span></h1>
             <p class="hero-subtitle">
-              Spin up an instant virtual watch room. Share your screen, window, or tab in crisp HD, chat with friends with live local timestamps, and hang out effortlessly.
+              Spin up an instant virtual watch room. Share your screen in crisp HD, chat live with exact local timestamps, and hang out effortlessly.
             </p>
           </div>
 
-          <!-- User Welcome & Active Name Banner -->
-          <div class="user-greeting-card">
-            <div class="greeting-left">
-              <div class="greeting-avatar" id="lobbyUserAvatar">A</div>
-              <div class="greeting-text">
-                <span class="greeting-sub">Joined as</span>
-                <span class="greeting-name" id="lobbyUserName">User</span>
-              </div>
-            </div>
-            <button id="lobbyChangeNameBtn" class="btn btn-secondary btn-sm">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-              </svg>
-              Change Name
-            </button>
-          </div>
-
-          <!-- Lobby Action Grid -->
+          <!-- Lobby Action Grid (Balanced Side-by-Side Cards) -->
           <div class="lobby-grid">
             
             <!-- Card 1: Create Room -->
             <div class="action-card create-card">
-              <div class="card-icon-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="16"></line>
-                  <line x1="8" y1="12" x2="16" y2="12"></line>
-                </svg>
+              <div class="card-header-row">
+                <div class="card-icon-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="card-title">Create a Watch Room</h2>
+                  <p class="card-desc">Start a new room with a unique code to invite friends.</p>
+                </div>
               </div>
-              <h2 class="card-title">Create a Watch Room</h2>
-              <p class="card-desc">Start a new room instantly. You'll get a unique room code and shareable link to invite others.</p>
               
               <form id="createRoomForm" class="card-form">
                 <div class="form-group">
                   <label for="createRoomNameInput" class="form-label">Room Name (Optional)</label>
-                  <input type="text" id="createRoomNameInput" class="form-input" placeholder="e.g. Cinema Night, Tech Stream, Study Pod" maxlength="50">
+                  <input type="text" id="createRoomNameInput" class="form-input" placeholder="e.g. Cinema Night, Tech Stream" maxlength="50">
                 </div>
                 <div class="form-group">
                   <label for="createCustomCodeInput" class="form-label">Custom Room Code (Optional)</label>
                   <input type="text" id="createCustomCodeInput" class="form-input" placeholder="e.g. my-cool-room" maxlength="30" pattern="[a-zA-Z0-9_-]+">
-                  <span class="form-hint">Leave blank for an automatic room code</span>
+                  <span class="form-hint">Leave blank for automatic room code</span>
                 </div>
                 <button type="submit" id="btnCreateRoom" class="btn btn-primary btn-block">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
@@ -170,21 +175,32 @@
 
             <!-- Card 2: Join Room -->
             <div class="action-card join-card">
-              <div class="card-icon-badge accent-cyan">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                  <polyline points="10 17 15 12 10 7"></polyline>
-                  <line x1="15" y1="12" x2="3" y2="12"></line>
-                </svg>
+              <div class="card-header-row">
+                <div class="card-icon-badge accent-cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="card-title">Join Existing Room</h2>
+                  <p class="card-desc">Enter with a code or link shared by someone else.</p>
+                </div>
               </div>
-              <h2 class="card-title">Join Existing Room</h2>
-              <p class="card-desc">Have a room code or link from a friend? Paste it below to jump right into the live room.</p>
               
               <form id="joinRoomForm" class="card-form">
                 <div class="form-group">
                   <label for="joinRoomCodeInput" class="form-label">Room Code or Full URL</label>
                   <input type="text" id="joinRoomCodeInput" class="form-input" placeholder="e.g. cosmic-hub-492 or paste link" required>
-                  <span class="form-hint">Paste full link or room code</span>
+                  <span class="form-hint">Paste full invite link or enter room code</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Direct Link Joining</label>
+                  <div class="card-info-box">
+                    <span class="info-icon">✨</span>
+                    <span>Clicking any shared room link opens the room automatically.</span>
+                  </div>
                 </div>
                 <button type="submit" id="btnJoinRoom" class="btn btn-secondary btn-block">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
@@ -199,7 +215,7 @@
 
           </div>
 
-          <!-- Feature Highlights -->
+          <!-- Feature Highlights Ribbon (Compact & Fits on 1 Screen) -->
           <div class="features-bar">
             <div class="feature-item">
               <div class="feature-icon">⚡</div>
@@ -212,21 +228,21 @@
               <div class="feature-icon">💬</div>
               <div class="feature-content">
                 <h4>Live Interactive Chat</h4>
-                <p>Real-time messaging with precise local time on each bubble</p>
+                <p>Real-time chat with exact local time on every bubble</p>
               </div>
             </div>
             <div class="feature-item">
               <div class="feature-icon">🔒</div>
               <div class="feature-content">
                 <h4>Permanent Name Memory</h4>
-                <p>Your name stays saved forever on this device without resets</p>
+                <p>Your name stays saved forever on this browser</p>
               </div>
             </div>
             <div class="feature-item">
               <div class="feature-icon">📱</div>
               <div class="feature-content">
                 <h4>Full Mobile Support</h4>
-                <p>Responsive layout tailored for phones, tablets & desktops</p>
+                <p>Responsive layout tailored for phones & desktops</p>
               </div>
             </div>
           </div>
