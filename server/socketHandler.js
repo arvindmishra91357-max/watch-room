@@ -244,6 +244,22 @@ function setupSocket(io) {
       }
     });
 
+    // 6b. Viewer requests offer from active screen sharer
+    socket.on('screen:request-offer', ({ sharerSocketId }) => {
+      try {
+        const targetId = sharerSocketId || (store.getScreenSharer(socket.data.roomId)?.socketId);
+        if (!targetId) return;
+
+        io.to(targetId).emit('screen:offer-requested', {
+          viewerSocketId: socket.id,
+          viewerUserId: socket.data.userId,
+          viewerName: socket.data.userName
+        });
+      } catch (err) {
+        console.error('[Socket] screen:request-offer error:', err);
+      }
+    });
+
     // 7. Explicit leave room
     socket.on('room:leave', () => {
       handleUserExit(socket, io);

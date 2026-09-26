@@ -50,8 +50,15 @@
   const presenterOverlayText = document.getElementById('presenterOverlayText');
   const noStreamPlaceholder = document.getElementById('noStreamPlaceholder');
   const emptyStateShareBtn = document.getElementById('emptyStateShareBtn');
+  const emptyStateShareBtnText = document.getElementById('emptyStateShareBtnText');
+  const emptyMobileNote = document.getElementById('emptyMobileNote');
   const videoFloatingControls = document.getElementById('videoFloatingControls');
   const btnToggleFullscreen = document.getElementById('btnToggleFullscreen');
+  const btnToggleTheater = document.getElementById('btnToggleTheater');
+  const theaterIconExpand = document.getElementById('theaterIconExpand');
+  const theaterIconRestore = document.getElementById('theaterIconRestore');
+  const btnFloatingChatPill = document.getElementById('btnFloatingChatPill');
+  const floatingChatBadge = document.getElementById('floatingChatBadge');
   const btnTogglePip = document.getElementById('btnTogglePip');
   const btnToggleAudio = document.getElementById('btnToggleAudio');
   const audioIconOn = document.getElementById('audioIconOn');
@@ -102,15 +109,49 @@
   // Initialization Flow
   // ==========================================================================
   function initApp() {
+    setupVisualViewportHandling();
     setupChatManager();
     setupEventListeners();
     refreshUserIdentityUI();
+    detectMobileCapabilities();
 
     // Check if user has already set a name
     if (!UserStorage.hasSavedUsername()) {
       showOnboardingModal();
     } else {
       checkUrlForRoom();
+    }
+  }
+
+  function detectMobileCapabilities() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      if (emptyMobileNote) emptyMobileNote.classList.remove('hidden');
+      if (emptyStateShareBtnText) emptyStateShareBtnText.textContent = 'Invite Friends to Stream';
+    }
+  }
+
+  function setupVisualViewportHandling() {
+    if (window.visualViewport) {
+      const handleVisualViewport = () => {
+        const vh = window.visualViewport.height;
+        document.documentElement.style.setProperty('--visual-viewport-height', `${vh}px`);
+        const isKeyboard = (window.innerHeight - vh) > 120;
+        if (isKeyboard) {
+          document.body.classList.add('keyboard-open');
+          if (document.activeElement === chatInput) {
+            setTimeout(() => {
+              ChatManager.scrollToBottom();
+            }, 100);
+          }
+        } else {
+          document.body.classList.remove('keyboard-open');
+        }
+      };
+
+      window.visualViewport.addEventListener('resize', handleVisualViewport);
+      window.visualViewport.addEventListener('scroll', handleVisualViewport);
+      handleVisualViewport();
     }
   }
 
@@ -124,9 +165,16 @@
           chatTabUnreadBadge.classList.remove('hidden');
           mobileUnreadBadge.textContent = count;
           mobileUnreadBadge.classList.remove('hidden');
+          if (floatingChatBadge) {
+            floatingChatBadge.textContent = count;
+            floatingChatBadge.classList.remove('hidden');
+          }
         } else {
           chatTabUnreadBadge.classList.add('hidden');
           mobileUnreadBadge.classList.add('hidden');
+          if (floatingChatBadge) {
+            floatingChatBadge.classList.add('hidden');
+          }
         }
       }
     });
@@ -249,14 +297,33 @@
       // Initialize WebRTC with this socket
       setupWebRTC(socket);
 
-      // If someone is already sharing screen, show live banner
+      // If someone is already sharing screen, show live banner and request stream
       if (data.screenSharer) {
         handleRemoteScreenActive(data.screenSharer.userName);
+        if (data.screenSharer.socketId !== socket.id) {
+          ScreenShareManager.requestOfferFromSharer(data.screenSharer.socketId);
+        }
       } else {
         handleScreenInactive();
       }
 
       showToast(`Welcome to ${data.room.name}!`, 'success');
+    });
+
+    // Screen sharing started in room
+    socket.on('screen:started', (sharerInfo) => {
+      console.log('[App] Screen share started by:', sharerInfo.userName);
+      if (sharerInfo.socketId !== socket.id) {
+        handleRemoteScreenActive(sharerInfo.userName);
+        ScreenShareManager.requestOfferFromSharer(sharerInfo.socketId);
+      }
+    });
+
+    // Screen sharing stopped in room
+    socket.on('screen:stopped', () => {
+      console.log('[App] Screen share stopped.');
+      handleScreenInactive();
+      showToast('Screen sharing ended.', 'info');
     });
 
     // Participants list updated
@@ -293,9 +360,33 @@
         presenterOverlay.classList.remove('hidden');
         presenterOverlayText.textContent = isLocal
           ? 'You are sharing your screen'
-          : `${sharerInfo.userName || 'Someone'} is sharing their screen`;
+          : `${sharerInfo.userName || 'Presenter'} is sharing their screen`;
 
         updateShareButtonState(isLocal);
+
+        if (isLocal) {
+          // Local presenter audio muted to prevent feedback loop
+          mainScreenVideo.muted = true;
+          audioIconOn.classList.add('hidden');
+          audioIconMuted.classList.remove('hidden');
+          mainScreenVideo.play().catch(e => console.warn('[Video] Presenter play warning:', e));
+        } else {
+          // Viewer stream playback with autoplay policy fallback
+          const playPromise = mainScreenVideo.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((err) => {
+              console.warn('[Video] Browser autoplay policy blocked unmuted video. Falling back to muted playback:', err);
+              mainScreenVideo.muted = true;
+              audioIconOn.classList.add('hidden');
+              audioIconMuted.classList.remove('hidden');
+              mainScreenVideo.play().then(() => {
+                showToast('Stream is playing muted. Click speaker icon to unmute.', 'info');
+              }).catch((e) => {
+                console.error('[Video] Playback failed completely:', e);
+              });
+            });
+          }
+        }
       },
       onStreamInactive: () => {
         handleScreenInactive();
@@ -422,8 +513,16 @@
     showToast('You left the room.', 'success');
   }
 
+  function triggerBadgeCopiedAnim(el) {
+    if (!el) return;
+    el.classList.add('copied-active');
+    setTimeout(() => el.classList.remove('copied-active'), 1200);
+  }
+
   function copyRoomLink() {
     if (!currentRoomId) return;
+    triggerBadgeCopiedAnim(headerRoomBadge);
+    triggerBadgeCopiedAnim(stageCopyCodePill);
     const url = `${window.location.origin}/?room=${encodeURIComponent(currentRoomId)}`;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url)
@@ -520,6 +619,12 @@
     // 2. Change Name Modal
     btnOpenChangeName.addEventListener('click', openChangeNameModal);
     lobbyChangeNameBtn.addEventListener('click', openChangeNameModal);
+    if (userProfileWidget) {
+      userProfileWidget.addEventListener('click', (e) => {
+        if (e.target.closest('#btnOpenChangeName')) return;
+        openChangeNameModal();
+      });
+    }
     btnCancelChangeName.addEventListener('click', closeChangeNameModal);
 
     changeNameForm.addEventListener('submit', (e) => {
@@ -612,7 +717,15 @@
     };
 
     btnToggleShareScreen.addEventListener('click', triggerShareScreen);
-    emptyStateShareBtn.addEventListener('click', triggerShareScreen);
+    emptyStateShareBtn.addEventListener('click', () => {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        copyRoomLink();
+        showToast('Invite link copied! 📋 Send to a friend on PC/Mac to broadcast.', 'success');
+      } else {
+        triggerShareScreen();
+      }
+    });
     btnDismissMobileWarning.addEventListener('click', () => {
       mobileWarningModal.classList.add('hidden');
     });
@@ -714,14 +827,73 @@
       }, 300);
     });
 
-    // 12. Floating Video Controls
+    // 12. Floating Video Controls & Theater Mode
+    if (btnToggleTheater) {
+      btnToggleTheater.addEventListener('click', () => {
+        if (!stageContainer) return;
+        const isMaximized = stageContainer.classList.toggle('mobile-stage-maximized');
+        if (theaterIconExpand && theaterIconRestore) {
+          if (isMaximized) {
+            theaterIconExpand.classList.add('hidden');
+            theaterIconRestore.classList.remove('hidden');
+            btnToggleTheater.title = 'Restore split view';
+            if (btnFloatingChatPill) btnFloatingChatPill.classList.remove('hidden');
+          } else {
+            theaterIconExpand.classList.remove('hidden');
+            theaterIconRestore.classList.add('hidden');
+            btnToggleTheater.title = 'Maximize video';
+            if (btnFloatingChatPill) btnFloatingChatPill.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    if (btnFloatingChatPill) {
+      btnFloatingChatPill.addEventListener('click', () => {
+        if (stageContainer) {
+          stageContainer.classList.remove('mobile-stage-maximized');
+          if (theaterIconExpand && theaterIconRestore) {
+            theaterIconExpand.classList.remove('hidden');
+            theaterIconRestore.classList.add('hidden');
+          }
+        }
+        btnFloatingChatPill.classList.add('hidden');
+        if (floatingChatBadge) floatingChatBadge.classList.add('hidden');
+        tabBtnChat.click();
+        chatInput.focus();
+        setTimeout(() => {
+          ChatManager.scrollToBottom();
+        }, 150);
+      });
+    }
+
     btnToggleFullscreen.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        theaterWrapper.requestFullscreen().catch(err => {
-          showToast(`Error attempting to enable fullscreen: ${err.message}`, 'error');
-        });
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!isFs) {
+        if (theaterWrapper.requestFullscreen) {
+          theaterWrapper.requestFullscreen().catch(() => {
+            // iOS Safari fallback: request fullscreen on the video element itself
+            if (mainScreenVideo && mainScreenVideo.webkitEnterFullscreen) {
+              mainScreenVideo.webkitEnterFullscreen();
+            } else if (mainScreenVideo && mainScreenVideo.requestFullscreen) {
+              mainScreenVideo.requestFullscreen().catch(() => {});
+            } else if (btnToggleTheater) {
+              btnToggleTheater.click();
+            }
+          });
+        } else if (mainScreenVideo && mainScreenVideo.webkitEnterFullscreen) {
+          mainScreenVideo.webkitEnterFullscreen();
+        } else if (mainScreenVideo && mainScreenVideo.requestFullscreen) {
+          mainScreenVideo.requestFullscreen().catch(() => {});
+        } else if (btnToggleTheater) {
+          btnToggleTheater.click();
+        }
       } else {
-        document.exitFullscreen();
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
       }
     });
 

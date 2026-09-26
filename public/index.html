@@ -69,7 +69,7 @@
         </div>
 
         <!-- User Identity Widget -->
-        <div class="user-profile-widget" id="userProfileWidget">
+        <div class="user-profile-widget" id="userProfileWidget" role="button" tabindex="0" title="Change your display name">
           <div class="user-avatar-circle" id="headerUserAvatar">?</div>
           <div class="user-meta">
             <span class="user-meta-label">YOUR NAME</span>
@@ -296,12 +296,29 @@
                     <rect x="12" y="9" width="8" height="6" rx="1" fill="currentColor"></rect>
                   </svg>
                 </button>
+                <button id="btnToggleTheater" class="btn-ctrl mobile-only" title="Maximize Video (Theater Mode)" aria-label="Maximize video">
+                  <svg id="theaterIconExpand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                  </svg>
+                  <svg id="theaterIconRestore" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"></path>
+                  </svg>
+                </button>
                 <button id="btnToggleFullscreen" class="btn-ctrl" title="Fullscreen" aria-label="Toggle fullscreen">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
                   </svg>
                 </button>
               </div>
+
+              <!-- Floating Chat Pill when Video is Maximized on Mobile -->
+              <button id="btnFloatingChatPill" class="floating-chat-pill hidden" aria-label="Open Live Chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Live Chat</span>
+                <span id="floatingChatBadge" class="floating-unread-badge hidden">0</span>
+              </button>
 
               <!-- Ultra-Modern Empty State: No Stream Active -->
               <div id="noStreamPlaceholder" class="empty-theater-state">
@@ -329,6 +346,9 @@
                 <p class="empty-subtitle">
                   No one is currently broadcasting. Click the button below to stream your monitor, application window, or browser tab with everyone in real time.
                 </p>
+                <p id="emptyMobileNote" class="empty-mobile-note hidden">
+                  <span>💡 Mobile browsers can watch & listen in HD. To broadcast your screen, open this room on a computer.</span>
+                </p>
 
                 <button id="emptyStateShareBtn" class="btn btn-primary btn-lg empty-action-btn">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
@@ -336,7 +356,7 @@
                     <polyline points="16 6 12 2 8 6"></polyline>
                     <line x1="12" y1="2" x2="12" y2="15"></line>
                   </svg>
-                  Start Screen Share
+                  <span id="emptyStateShareBtnText">Start Screen Share</span>
                 </button>
               </div>
 
